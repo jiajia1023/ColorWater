@@ -8,9 +8,9 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/base_toolbar"
         android:layout_width="match_parent"
-        app:titleTextColor="@color/white"
         android:layout_height="@dimen/title_height"
-        android:background="@color/title_color" />
+        android:background="@drawable/bg_title"
+        app:titleTextColor="@color/white" />
 
     <FrameLayout
         android:id="@+id/base_framelayout"

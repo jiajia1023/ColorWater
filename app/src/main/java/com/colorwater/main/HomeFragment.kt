@@ -1,8 +1,11 @@
 package com.colorwater.main
 
 import android.view.View
+import android.widget.Toast
 import com.colorwater.R
 import com.morelibrary.ui.BaseFragment
+import com.morelibrary.view.AutoBanner
+import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * author:jjj
@@ -14,9 +17,21 @@ class HomeFragment : BaseFragment() {
 
 
     override fun onInitView(view: View?) {
+
     }
 
     override fun onBindData() {
+        var urlList = ArrayList<String>()
+        urlList.add("http://img4.duitang.com/uploads/item/201601/12/20160112201847_dTscn.jpeg")
+        urlList.add("http://pic36.photophoto.cn/20150728/0022005597823716_b.jpg")
+        urlList.add("http://d.paper.i4.cn/max/2017/03/23/14/1490249222986_905517.jpg")
+        fragmentHome_banner!!.onSetData(urlList)
+        fragmentHome_banner!!.setAutoBannerListener(object : AutoBanner.AutoBannerListener {
+            override fun onClick(position: Int, o: Any?) {
+                Toast.makeText(activity, position.toString() + "--" + o.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+        })
     }
 
 }
