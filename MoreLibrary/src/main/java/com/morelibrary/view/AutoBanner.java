@@ -34,7 +34,7 @@ public class AutoBanner extends RelativeLayout {
     private List<ImageView> mViewList;
     private int mLastP = 0;
     private int currentPosition;
-    private int mPageNum = 0;//总的页数
+    private int count = 0;
 
     public AutoBanner(Context context) {
         super(context);
@@ -72,6 +72,8 @@ public class AutoBanner extends RelativeLayout {
             imgList = new ArrayList<>();
             imgList.add("-1");
         }
+        mGroup.removeAllViews();
+
         int index = 0;
         for (final String url : imgList) {
             ImageView imageView = new ImageView(mContext);
@@ -101,7 +103,7 @@ public class AutoBanner extends RelativeLayout {
             mGroup.addView(radioButton);
             index++;
         }
-        mPageNum = mViewList.size();
+        count = mViewList.size();
         mViewPager.setAdapter(new AutoBannerAdapter());
         if (index == 1) {
             mGroup.setVisibility(View.GONE);
@@ -111,73 +113,28 @@ public class AutoBanner extends RelativeLayout {
     ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i1) {
-//            Log.e("onPageScrolled：", "onPageScrolled：" + i + "--" + v + "--" + i1);
         }
 
         @Override
         public void onPageSelected(int position) {
-            Log.e("onPageSelected：", "onPageSelected：" + position + "");
-            currentPosition = position;
-            if (mLastP != position) {
-                ((RadioButton) mGroup.getChildAt(mLastP)).setButtonDrawable(defaultDra);
-                ((RadioButton) mGroup.getChildAt(position)).setButtonDrawable(selectDra);
-                mLastP = position;
-            }
-
-//            if (position == 0 || position == mGroup.getChildCount() + 1) {
-//                //最后一张其实是第一张
-//                position = 0;
-//                ((RadioButton) mGroup.getChildAt(position)).setButtonDrawable(selectDra);
-//                mLastP = 0;
-//            } else {
-//                ((RadioButton) mGroup.getChildAt(position - 1)).setButtonDrawable(selectDra);
-//                mLastP = position - 1;
-//            }
         }
 
         @Override
         public void onPageScrollStateChanged(int state) {
-            Log.e("ScrollStateChanged：", "onPageScrollStateChanged：" + state + "");
-////            若viewpager滑动未停止，直接返回
-//            if (state != ViewPager.SCROLL_STATE_IDLE) return;
-////        若当前为第一张，设置页面为倒数第二张
-//            if (currentPosition == 0) {
-//                mViewPager.setCurrentItem(mViewList.size()-2,false);
-//            } else if (currentPosition == mViewList.size()-1) {
-////        若当前为倒数第一张，设置页面为第二张
-//                mViewPager.setCurrentItem(1,false);
-//            }
             //state 1-开始 2-滑动 0-停止
-//            switch (state) {
-//                case 1:
-//if (currentPosition==0){
-//
-//}
-//                    break;
-//                case 2:
-//                    break;
-//                case 0:
-//                    break;
-//            }
-
-
             currentPosition = mViewPager.getCurrentItem();
-            Log.e("currentPosition：", "---" + currentPosition + "--mPageNum="+mPageNum);
-
+//            Log.e("=====2=", " mViewPager.getCurrentItem()=" + mViewPager.getCurrentItem() + "--count=" + count + "---state=" + state);
             switch (state) {
                 case 0://No operation
-                    if (currentPosition == 0) {
-                        mViewPager.setCurrentItem(mPageNum-1, false);
-                    } else if (currentPosition == mPageNum-1 ) {
+                    if (currentPosition == 0 && mLastP == 0) {
+                        mViewPager.setCurrentItem(count, false);
+                    } else if (currentPosition == count - 1 && mLastP == count - 1) {
                         mViewPager.setCurrentItem(0, false);
                     }
+                    mLastP = mViewPager.getCurrentItem();
+
                     break;
                 case 1://start Sliding
-                    if (currentPosition == mPageNum -1) {
-                        mViewPager.setCurrentItem(0, false);
-                    } else if (currentPosition == 0) {
-                        mViewPager.setCurrentItem(mPageNum-1, false);
-                    }
                     break;
                 case 2://end Sliding
                     break;
