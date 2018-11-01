@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,7 +93,7 @@ public class AutoBanner extends RelativeLayout {
 
 
             RadioButton radioButton = new RadioButton(mContext);
-            radioButton.setPadding(R.dimen.padding_autobanner, 0, 0, 0);
+            radioButton.setPadding(15, 0, 0, 0);
             if (index == 0) {
                 radioButton.setButtonDrawable(selectDra);
             } else {
@@ -115,8 +114,12 @@ public class AutoBanner extends RelativeLayout {
         public void onPageScrolled(int i, float v, int i1) {
         }
 
+
         @Override
         public void onPageSelected(int position) {
+            ((RadioButton) mGroup.getChildAt(position)).setButtonDrawable(selectDra);
+            ((RadioButton) mGroup.getChildAt(mLastP)).setButtonDrawable(defaultDra);
+
         }
 
         @Override
@@ -132,7 +135,6 @@ public class AutoBanner extends RelativeLayout {
                         mViewPager.setCurrentItem(0, false);
                     }
                     mLastP = mViewPager.getCurrentItem();
-
                     break;
                 case 1://start Sliding
                     break;
@@ -164,7 +166,6 @@ public class AutoBanner extends RelativeLayout {
 
         @Override
         public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
-
             return view == o;
         }
     }
