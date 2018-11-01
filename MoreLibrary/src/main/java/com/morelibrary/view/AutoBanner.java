@@ -33,7 +33,9 @@ public class AutoBanner extends RelativeLayout {
     private List<ImageView> mViewList;
     private int mLastP = 0;
     private int currentPosition;
+    private int lastPosition = 0;
     private int count = 0;
+    private ImageView.ScaleType mScaleType = ImageView.ScaleType.CENTER_CROP;
 
     public AutoBanner(Context context) {
         super(context);
@@ -60,6 +62,49 @@ public class AutoBanner extends RelativeLayout {
         mViewPager.addOnPageChangeListener(pageChangeListener);
     }
 
+    /**
+     * 设置banner的宽高
+     *
+     * @param width
+     * @param height
+     */
+    public void setBannerWidthAndHeight(int width, int height) {
+        mViewPager.setLayoutParams(new LayoutParams(width, height));
+    }
+
+
+    /**
+     * 设置小圆点位于图片下面哪个方位（左、中、右）
+     *
+     * @param verb a layout verb, such as {@link #ALIGN_PARENT_LEFT}
+     */
+    public void onSetMode_Below(int verb) {
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.BELOW, R.id.autoBanner_viewpager);
+        params.addRule(verb);
+        mGroup.setLayoutParams(params);
+    }
+
+    /**
+     * 设置小圆点在父布局的下方
+     *
+     * @param verb a layout verb, such as {@link #ALIGN_PARENT_LEFT}
+     */
+    public void onSetMode_BottomParent(int verb) {
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.autoBanner_viewpager);
+        params.addRule(verb);
+        mGroup.setLayoutParams(params);
+    }
+
+    /**
+     * 设置图片的显示模式
+     *
+     * @param mScaleType
+     */
+    public void setScaleType(ImageView.ScaleType mScaleType) {
+        this.mScaleType = mScaleType;
+    }
 
     /**
      * 设置数据
@@ -78,7 +123,7 @@ public class AutoBanner extends RelativeLayout {
             ImageView imageView = new ImageView(mContext);
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             imageView.setLayoutParams(params);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setScaleType(mScaleType);
             ImageManager.onLoadImage(mContext, url, imageView);
             final int finalIndex = index;
             imageView.setOnClickListener(new OnClickListener() {
@@ -117,9 +162,10 @@ public class AutoBanner extends RelativeLayout {
 
         @Override
         public void onPageSelected(int position) {
+//            Log.e("======", "position=" + position + "---lastP=" + lastPosition);
             ((RadioButton) mGroup.getChildAt(position)).setButtonDrawable(selectDra);
-            ((RadioButton) mGroup.getChildAt(mLastP)).setButtonDrawable(defaultDra);
-
+            ((RadioButton) mGroup.getChildAt(lastPosition)).setButtonDrawable(defaultDra);
+            lastPosition = position;
         }
 
         @Override
