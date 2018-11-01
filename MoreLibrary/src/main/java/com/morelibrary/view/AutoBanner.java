@@ -1,10 +1,14 @@
 package com.morelibrary.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +22,8 @@ import com.morelibrary.image.ImageManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * author:jjj
@@ -36,6 +42,11 @@ public class AutoBanner extends RelativeLayout {
     private int lastPosition = 0;
     private int count = 0;
     private ImageView.ScaleType mScaleType = ImageView.ScaleType.CENTER_CROP;
+    /**
+     * 是否自动滑动
+     */
+    private boolean isAuto = true;
+
 
     public AutoBanner(Context context) {
         super(context);
@@ -60,6 +71,29 @@ public class AutoBanner extends RelativeLayout {
         addView(mView);
         mViewList = new ArrayList<>();
         mViewPager.addOnPageChangeListener(pageChangeListener);
+        if (isAuto) {
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    ((Activity)mContext).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //需要滑动了
+                            if (lastPosition < count - 1) {
+                                mViewPager.setCurrentItem(lastPosition + 1);
+                            } else {
+                                mViewPager.setCurrentItem(0);
+                            }
+                            Log.e("====", "需要滑动了~~~lastPosition=" + lastPosition);
+                        }
+                    });
+
+                }
+            }, 1000);
+//            mHandler.sendEmptyMessage(1);
+//            new Thread(runnable).start();
+        }
     }
 
     /**
@@ -153,6 +187,39 @@ public class AutoBanner extends RelativeLayout {
             mGroup.setVisibility(View.GONE);
         }
     }
+
+    /**
+     * 线程处理
+     */
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                //需要滑动了
+                if (lastPosition < count - 1) {
+                    mViewPager.setCurrentItem(lastPosition + 1);
+                } else {
+                    mViewPager.setCurrentItem(0);
+                }
+                Log.e("====", "需要滑动了~~~lastPosition=" + lastPosition);
+            }
+        }
+    };
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (true) {
+                try {
+                    Thread.sleep(1000);
+                    mHandler.sendEmptyMessage(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
 
     ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
