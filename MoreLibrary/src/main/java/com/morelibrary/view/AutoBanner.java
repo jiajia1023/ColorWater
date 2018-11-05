@@ -74,22 +74,23 @@ public class AutoBanner extends RelativeLayout {
         mViewList = new ArrayList<>();
         mViewPager.addOnPageChangeListener(pageChangeListener);
         if (isAuto) {
+            //自动播放的
             onTimer(1000);
-        }
 
-        mViewPager.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    onActionTimer();
-                } else {
-                    lastTime = System.currentTimeMillis();
-                    onTimerCancel();
+            mViewPager.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        onActionTimer();
+                    } else {
+                        lastTime = System.currentTimeMillis();
+                        onTimerCancel();
+                    }
+
+                    return false;
                 }
-
-                return false;
-            }
-        });
+            });
+        }
     }
 
     TimerTask timerTask1;
@@ -142,13 +143,6 @@ public class AutoBanner extends RelativeLayout {
         timer.schedule(timerTask, delay, 1000);
 
     }
-
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-
-        }
-    };
 
     /**
      * 取消定时任务
