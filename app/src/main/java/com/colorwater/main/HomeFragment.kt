@@ -22,7 +22,7 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun onBindData() {
-        fragmentHome_banner!!.setBannerWidthAndHeight(RelativeLayout.LayoutParams.MATCH_PARENT,600)
+        fragmentHome_banner!!.setBannerWidthAndHeight(RelativeLayout.LayoutParams.MATCH_PARENT, 600)
         fragmentHome_banner!!.onSetMode_BottomParent(RelativeLayout.ALIGN_PARENT_RIGHT)
 //        fragmentHome_banner!!.onSetRadioGroupLayouParams()
         var urlList = ArrayList<String>()
@@ -36,6 +36,11 @@ class HomeFragment : BaseFragment() {
             }
 
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        fragmentHome_banner!!.onTimerCancel()
     }
 
 }

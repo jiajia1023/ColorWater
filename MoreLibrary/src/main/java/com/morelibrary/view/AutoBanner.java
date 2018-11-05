@@ -2,14 +2,12 @@ package com.morelibrary.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import com.morelibrary.R;
+import com.morelibrary.common.LogUtil;
 import com.morelibrary.image.ImageManager;
 
 import java.util.ArrayList;
@@ -46,6 +45,9 @@ public class AutoBanner extends RelativeLayout {
      * 是否自动滑动
      */
     private boolean isAuto = true;
+    private Timer timer;
+    private TimerTask timerTask;
+    private long lastTime = 0;
 
 
     public AutoBanner(Context context) {
@@ -63,7 +65,7 @@ public class AutoBanner extends RelativeLayout {
         init(context);
     }
 
-    private void init(Context context) {
+    private void init(final Context context) {
         this.mContext = context;
         View mView = LayoutInflater.from(context).inflate(R.layout.view_banner_auto, null);
         mViewPager = mView.findViewById(R.id.autoBanner_viewpager);
@@ -72,29 +74,106 @@ public class AutoBanner extends RelativeLayout {
         mViewList = new ArrayList<>();
         mViewPager.addOnPageChangeListener(pageChangeListener);
         if (isAuto) {
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
+            onTimer(1000);
+        }
+
+        mViewPager.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    onActionTimer();
+                } else {
+                    lastTime = System.currentTimeMillis();
+                    onTimerCancel();
+                }
+
+                return false;
+            }
+        });
+    }
+
+    TimerTask timerTask1;
+    private Timer timer1;
+
+    /**
+     * 监听过了多少时常
+     */
+    private void onActionTimer() {
+
+        if (timerTask1 == null) {
+            timerTask1 = new TimerTask() {
                 @Override
                 public void run() {
-                    ((Activity)mContext).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //需要滑动了
-                            if (lastPosition < count - 1) {
-                                mViewPager.setCurrentItem(lastPosition + 1);
-                            } else {
-                                mViewPager.setCurrentItem(0);
-                            }
-                            Log.e("====", "需要滑动了~~~lastPosition=" + lastPosition);
-                        }
-                    });
-
+                    LogUtil.e("=====System.currentTimeMillis():" + System.currentTimeMillis() + "---" + (System.currentTimeMillis() - lastTime));
+                    if ((System.currentTimeMillis() - lastTime) > 3000) {
+                        timerTask1.cancel();
+                        timerTask1 = null;
+                        timer1.cancel();
+                        timer1 = null;
+                        onTimer(1000);
+                    }
                 }
-            }, 1000);
-//            mHandler.sendEmptyMessage(1);
-//            new Thread(runnable).start();
+            };
+            timer1 = new Timer();
+            timer1.schedule(timerTask1, 0, 2000);
         }
     }
+
+
+    private void onTimer(long delay) {
+        timer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                ((Activity) mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //需要滑动了
+                        if (lastPosition < count - 1) {
+                            mViewPager.setCurrentItem(lastPosition + 1);
+                        } else {
+                            mViewPager.setCurrentItem(0);
+                        }
+                        LogUtil.e("需要滑动了~~~lastPosition=" + lastPosition);
+                    }
+                });
+            }
+        };
+        timer.schedule(timerTask, delay, 1000);
+
+    }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+
+        }
+    };
+
+    /**
+     * 取消定时任务
+     */
+    public void onTimerCancel() {
+        if (timerTask != null) {
+
+            timerTask.cancel();
+            timerTask = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+
+        if (timer1 != null) {
+            timer1.cancel();
+            timer1 = null;
+        }
+        if (timerTask1 != null) {
+            timerTask1.cancel();
+            timerTask1 = null;
+        }
+    }
+
 
     /**
      * 设置banner的宽高
@@ -187,39 +266,6 @@ public class AutoBanner extends RelativeLayout {
             mGroup.setVisibility(View.GONE);
         }
     }
-
-    /**
-     * 线程处理
-     */
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 1) {
-                //需要滑动了
-                if (lastPosition < count - 1) {
-                    mViewPager.setCurrentItem(lastPosition + 1);
-                } else {
-                    mViewPager.setCurrentItem(0);
-                }
-                Log.e("====", "需要滑动了~~~lastPosition=" + lastPosition);
-            }
-        }
-    };
-
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            if (true) {
-                try {
-                    Thread.sleep(1000);
-                    mHandler.sendEmptyMessage(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    };
 
     ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
