@@ -2,6 +2,7 @@ package com.morelibrary.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -33,8 +34,8 @@ public class AutoBanner extends RelativeLayout {
     private ViewPager mViewPager;
     private RadioGroup mGroup;
     private Context mContext;
-    private int selectDra = R.drawable.banner_selected;
-    private int defaultDra = R.drawable.banner_unselect;
+    private int selectDra;
+    private int defaultDra;
     private List<ImageView> mViewList;
     private int mLastP = 0;
     private int currentPosition;
@@ -44,24 +45,19 @@ public class AutoBanner extends RelativeLayout {
     /**
      * 是否自动滑动
      */
-    private boolean isAuto = true;
+    private boolean isAuto;
     private Timer timer;
     private TimerTask timerTask;
     private long lastTime = 0;
 
 
-    public AutoBanner(Context context) {
-        super(context);
-        init(context);
-    }
-
     public AutoBanner(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
-    }
-
-    public AutoBanner(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.AutoBanner);
+        isAuto = array.getBoolean(R.styleable.AutoBanner_is_auto, false);
+        defaultDra = array.getInt(R.styleable.AutoBanner_defaultDra, R.drawable.banner_unselect);
+        selectDra = array.getInt(R.styleable.AutoBanner_selectDra, R.drawable.banner_selected);
+        array.recycle();
         init(context);
     }
 
@@ -75,7 +71,7 @@ public class AutoBanner extends RelativeLayout {
         mViewPager.addOnPageChangeListener(pageChangeListener);
         if (isAuto) {
             //自动播放的
-            onTimer(1000);
+            onTimer(3000);
 
             mViewPager.setOnTouchListener(new OnTouchListener() {
                 @Override

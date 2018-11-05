@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AutoBanner">
+        <attr name="is_auto" format="boolean" />
+        <attr name="selectDra" format="integer" />
+        <attr name="defaultDra" format="integer" />
+    </declare-styleable>
+</resources>

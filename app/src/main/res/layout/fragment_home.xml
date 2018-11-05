@@ -9,6 +9,7 @@
         android:id="@+id/fragmentHome_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:is_auto="true"
         app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
