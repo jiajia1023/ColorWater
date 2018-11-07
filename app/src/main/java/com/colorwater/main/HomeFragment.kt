@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.colorwater.R
+import com.colorwater.main.adapter.HomeAdapter
 import com.morelibrary.ui.BaseFragment
 import com.morelibrary.view.AutoBanner
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -36,11 +37,29 @@ class HomeFragment : BaseFragment() {
             }
 
         })
+        var list = ArrayList<HomeInfo>()
+        list.add(HomeInfo("1", R.drawable.bg_shap_green))
+        list.add(HomeInfo("2", R.drawable.bg_shap_red))
+        list.add(HomeInfo("3", R.drawable.bg_shap_blue))
+        list.add(HomeInfo("4", R.drawable.bg_shap_yellow))
+        list.add(HomeInfo("5", R.drawable.bg_shap_purlpe))
+
+        fragmentHome_listView!!.adapter = HomeAdapter(activity!!, list!!)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         fragmentHome_banner!!.onTimerCancel()
+    }
+
+    inner class HomeInfo {
+        var text = ""
+        var resBg = 0
+
+        constructor(text: String, resBg: Int) {
+            this.text = text
+            this.resBg = resBg
+        }
     }
 
 }
