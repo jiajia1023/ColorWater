@@ -1,5 +1,6 @@
 package com.colorwater.main
 
+import android.content.Intent
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
@@ -98,6 +99,13 @@ class MainActivity : BaseActivity() {
     }
 
     override fun hasTitle(): Boolean = false
+
+    companion object {
+        fun inVoke(activity: BaseActivity) {
+            var intent = Intent(activity, MainActivity::class.java)
+            activity.startActivity(intent)
+        }
+    }
 
 }
 
