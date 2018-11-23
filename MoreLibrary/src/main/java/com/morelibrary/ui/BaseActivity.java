@@ -21,7 +21,7 @@ import com.morelibrary.R;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     public static final String TITLE = "activity_title";
-    private Toolbar baseToolbar;
+    protected Toolbar baseToolbar;
 
 
     @Override
@@ -49,7 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
             LayoutInflater.from(this).inflate(onLayoutResId(), baseContentFl);
             if (getIntent().hasExtra(TITLE)) {
-                baseToolbar.setTitle(getIntent().getStringExtra(TITLE));
+                setTitle(getIntent().getStringExtra(TITLE));
             }
         } else {
             setContentView(onLayoutResId());
@@ -85,7 +85,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param title
      */
     protected void onSetTitle(String title) {
-        baseToolbar.setTitle(title);
+        setTitle(title);
     }
 
     /**

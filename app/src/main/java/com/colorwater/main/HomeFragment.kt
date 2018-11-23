@@ -4,7 +4,10 @@ import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.colorwater.R
+import com.colorwater.draw.DrawingActivity
+import com.colorwater.image.ShowImageActivity
 import com.colorwater.main.adapter.HomeAdapter
+import com.morelibrary.ui.BaseActivity
 import com.morelibrary.ui.BaseFragment
 import com.morelibrary.view.AutoBanner
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -38,13 +41,23 @@ class HomeFragment : BaseFragment() {
 
         })
         var list = ArrayList<HomeInfo>()
-        list.add(HomeInfo("1", R.drawable.bg_shap_green))
-        list.add(HomeInfo("2", R.drawable.bg_shap_red))
+        list.add(HomeInfo("画画", R.drawable.bg_shap_green))
+        list.add(HomeInfo("查看图片", R.drawable.bg_shap_red))
         list.add(HomeInfo("3", R.drawable.bg_shap_blue))
         list.add(HomeInfo("4", R.drawable.bg_shap_yellow))
         list.add(HomeInfo("5", R.drawable.bg_shap_purlpe))
 
         fragmentHome_listView!!.adapter = HomeAdapter(activity!!, list!!)
+        fragmentHome_listView!!.setOnItemClickListener { parent, view, position, id ->
+            when (position) {
+                0 -> {
+                    DrawingActivity.inVoke(activity as BaseActivity)
+                }
+                1 -> {
+                    ShowImageActivity.inVoke(activity as BaseActivity)
+                }
+            }
+        }
     }
 
     override fun onDestroy() {

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MoreLibrary</string>
+    <string name="selectImage_right">确定</string>
 </resources>
