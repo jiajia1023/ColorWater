@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import com.colorwater.R
+import com.morelibrary.image.ImageManager
 import com.morelibrary.image.SelectImageActivity
 import com.morelibrary.ui.BaseActivity
 import kotlinx.android.synthetic.main.activity_show_image.*
@@ -21,6 +22,7 @@ class ShowImageActivity : BaseActivity() {
         showImage_selectTv!!.setOnClickListener {
             SelectImageActivity.inVoke(this, 1)
         }
+        ImageManager.onLoadImage(this,"http://pic33.photophoto.cn/20141022/0019032438899352_b.jpg",showImage_iv)
     }
 
     override fun onBindData() {

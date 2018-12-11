@@ -6,12 +6,18 @@
     android:orientation="vertical"
     tools:context=".image.ShowImageActivity">
 
-    <ImageView
+    <!--<ImageView-->
+    <!--android:id="@+id/showImage_iv"-->
+    <!--android:layout_width="350dp"-->
+    <!--android:layout_height="400dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_margin="10dp" />-->
+    <com.morelibrary.view.SuqareImageView
         android:id="@+id/showImage_iv"
-        android:layout_width="350dp"
-        android:layout_height="400dp"
-        android:layout_gravity="center"
-        android:layout_margin="10dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:layout_gravity="center" />
 
     <TextView
         android:id="@+id/showImage_selectTv"
