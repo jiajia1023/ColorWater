@@ -53,12 +53,16 @@ public class LabelView extends ViewGroup {
                     break;
             }
 
-            setMeasuredDimension(childWith, 0);
+            setMeasuredDimension(childWith, params.height);
         }
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        for (int i = 0; i < getChildCount(); i++) {
+            View childView = getChildAt(i);
+//            onLayout();
 
+        }
     }
 }
