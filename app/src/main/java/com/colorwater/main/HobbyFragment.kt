@@ -3,6 +3,7 @@ package com.colorwater.main
 import android.view.View
 import com.colorwater.R
 import com.morelibrary.ui.BaseFragment
+import kotlinx.android.synthetic.main.fragment_hobby.*
 
 /**
  * author:jjj
@@ -17,6 +18,7 @@ class HobbyFragment : BaseFragment() {
     }
 
     override fun onBindData() {
+        hobby_labelView!!.onSetData()
     }
 
 }
